@@ -1,15 +1,22 @@
 # Hospital Documentation & Funding Integrity Dashboard
 
-A desktop application for analyzing hospital documentation quality and funding integrity. Load CSV datasets, view reconciliation scores by service line, and drill down into individual cases.
+**Clinical Documentation–Coding Reconciliation Engine (Offline MVP)** — An offline desktop application that helps hospitals identify documentation–coding inconsistencies in retrospective discharge data.
+
+Hospitals generate large volumes of clinical documentation that are coded for reporting and case-mix analysis. Gaps between documented conditions and assigned ICD-10-CA codes can affect reporting accuracy and financial planning. This tool provides a **read-only analytics layer** that extracts concepts from discharge summaries, compares them to assigned codes, flags potential mismatches, and produces executive-level metrics. It runs entirely **offline** within a secure hospital environment.
+
+---
 
 ## Features
 
-- **Load CSV datasets** – Ingest discharge summaries, ICD codes, CMG weights, and service lines.
-- **Overview** – Executive summary and high-level metrics.
-- **Service line view** – Charts and scores by service line (e.g. Cardiology, Pulmonology).
-- **Case-level view** – Per-record reconciliation and documentation review.
-- **Local SQLite storage** – All data stored in `hospital_dashboard.db` in the project folder.
-- **Reporting** – Export summaries and reconciliation data (see `reporting.py`).
+- **Offline desktop app** — Python + PyQt6; no internet or cloud; deployable inside secure networks.
+- **Batch CSV ingestion** — Upload structured discharge data; required fields validated; local processing only.
+- **Clinical concept extraction** — Medical terms from free-text summaries with basic negation handling.
+- **Coding reconciliation** — Map documented terms to simplified ICD-10-CA; identify documented-but-uncoded or potentially overcoded cases.
+- **Funding sensitivity (MVP)** — Placeholder logic to estimate variance range when mismatches are detected; department-level aggregation.
+- **Executive dashboard** — Overall mismatch rate, average missing codes per record, variance range, service-line comparison.
+- **Case-level drilldown** — Record-level reconciliation view, expandable details, exportable results.
+- **Local SQLite storage** — Processed sessions saved in `hospital_dashboard.db`; reload previous analyses; no external database.
+- **Reporting** — Export summaries and reconciliation data (see `reporting.py`).
 
 ## Requirements
 
@@ -77,6 +84,22 @@ hospital_dashboard/
     ├── service_tab.py   # Service line tab
     └── case_tab.py      # Case-level tab
 ```
+
+**Design principles:** Read-only analytics (no EMR write-back); low friction (file-based ingestion); transparent reconciliation logic; hospital-appropriate UI.
+
+**Intended users:** HIM teams, CDI leads, finance/case-mix analysts, quality and performance teams.
+
+**Current scope (MVP)** — Retrospective batch analytics only. This version does *not* integrate with EMR APIs, modify documentation, provide real-time coding prompts, or replace coding systems.
+
+**Future direction** — Potential evolution: departmental documentation feedback, targeted education analytics, near-real-time pre-discharge flagging, compliance reporting modules.
+
+---
+
+## Disclaimer
+
+This MVP uses simplified ICD mapping and placeholder funding sensitivity logic. It is for **research, prototyping, and internal evaluation** only. It does not replace certified coding review or official case-mix methodologies.
+
+---
 
 ## License
 
